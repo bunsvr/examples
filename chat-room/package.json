@@ -1,0 +1,18 @@
+{
+  "name": "chat-room",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@stricjs/router": "latest",
+    "@stricjs/utils": "latest"
+  },
+  "scripts": {
+    "start": "bun src/index.ts"
+  }
+}

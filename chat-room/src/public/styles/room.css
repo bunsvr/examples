@@ -1,0 +1,86 @@
+* {
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: black;
+    color: white;
+}
+
+#msgbox {
+    width: 100%;
+    height: calc(100% - 100px);
+    overflow-y: scroll;
+    padding: 5% 15% 0 15%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+input, button {
+    padding: 7px 14px;
+    border: 1px solid white;
+
+    background: transparent;
+    color: white;
+
+    height: 50px;
+}
+
+input {
+    width: calc(70%);
+    outline: none; 
+    margin: 0;
+}
+
+button {
+    width: 100px;
+    border-left: none;
+    margin: 0;
+}
+
+#msgsubmit {
+    width: 100%;
+    height: 100px;
+    position: fixed;
+
+    border-top: 1px solid white;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.note {
+    width: 100%;
+    text-align: center;
+    color: whitesmoke;
+    font-size: 14px;
+
+    padding: 20px;
+}
+
+.msg.self {
+    align-self: self-end;
+    text-align: right;
+}
+
+.msg.self > span {
+    color: lightskyblue;
+}
+
+.msg > span {
+    font-size: 16px;
+    color: red;
+}
+
+.msg > p {
+    font-size: 20px;
+}
