@@ -15,8 +15,7 @@ interface User {
 const getRoom = qs.searchKey('q'),
     roomLimit = 1000, messageLenLimit = 10000;
 
-const group = new Group()
-group.ws<User>('/ws/room', {
+export default new Group().ws<User>('/ws/room', {
     open(ws) {
         const room = getRoom(ws.data.ctx);
         if (room === null) return ws.terminate();
@@ -51,5 +50,3 @@ group.ws<User>('/ws/room', {
         console.log('User leaves:', ws.data.name);
     }
 });
-
-export default group;
