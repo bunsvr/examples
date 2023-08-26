@@ -35,12 +35,10 @@ export default new Group().ws<User>('/ws/room', {
     },
 
     message(ws, message) {
-        if (typeof message !== 'string') return;
-
-        if (message.length > messageLenLimit) return;
+        if (typeof message !== 'string' || message.length > messageLenLimit) return;
         message = 'msg:' + ws.data.name + ':' + message;
 
-        // Send a message to the room
+        // Send a message to all room members include the sender
         ws.publish(ws.data.room, message);
         ws.send(message);
     },
