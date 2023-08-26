@@ -6,8 +6,7 @@ const msgBox = document.getElementById('msgbox');
 
 // Slice /room/
 const roomID = location.pathname.slice(6),
-    url = `ws://${location.host}/ws/room?q=${encodeURIComponent(location.pathname)
-        }`,
+    url = `ws://${location.host}/ws/room?q=${encodeURIComponent(location.pathname)}`,
     reconnectLimit = 5;
 
 /** @type {WebSocket} */
