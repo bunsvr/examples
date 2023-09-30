@@ -4,5 +4,8 @@ import pages from './pages';
 import room from './ws/room';
 
 export default new Stric()
-    .plug(pages, room)
+    // Plugin for pages and rooms
+    .plug(pages)
+    .plug(room)
+    // Serve the public directory
     .all('/public/*', dir(import.meta.dir + '/public'));
