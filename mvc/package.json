@@ -1,0 +1,15 @@
+{
+  "name": "mvc",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@stricjs/router": "^4.2.6",
+    "@stricjs/utils": "^1.5.3"
+  }
+}
