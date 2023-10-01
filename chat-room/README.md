@@ -13,3 +13,6 @@ To run:
 ```bash
 bun .
 ```
+
+This will start a server at [localhost:3000](http://localhost:3000)
+

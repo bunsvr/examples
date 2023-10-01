@@ -9,8 +9,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@stricjs/router": "^4.2.6",
-    "@stricjs/utils": "^1.5.3"
+    "@stricjs/router": "^4.2.8",
+    "@stricjs/utils": "^1.5.5"
   },
   "scripts": {
     "start": "bun src/index.ts"

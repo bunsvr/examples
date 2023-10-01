@@ -5,8 +5,8 @@
 const msgBox = document.getElementById('msgbox');
 
 // Slice /room/
-const roomID = location.pathname.slice(6),
-    url = `ws://${location.host}/ws/room?q=${encodeURIComponent(location.pathname)}`,
+const roomID = new URLSearchParams(location.search).get('name'),
+    url = `ws://${location.host}/ws/room?q=${encodeURIComponent(roomID)}`,
     reconnectLimit = 5;
 
 /** @type {WebSocket} */
@@ -84,7 +84,7 @@ function connect() {
                 });
             } else if (msg.startsWith('leave')) {
                 newE.className = 'note';
-                newE.innerHTML = msg.substring(6) + 'left the chat :(';
+                newE.innerHTML = msg.substring(6) + ' left the chat :(';
             }
 
             msgBox.appendChild(newE);
