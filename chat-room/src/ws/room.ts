@@ -15,7 +15,7 @@ interface User {
 const getRoom = qs.searchKey('q'),
     roomLimit = 1000, messageLenLimit = 10000;
 
-export default new Group('/ws').ws<User>('/room', {
+export default new Group().ws<User>('/room', {
     open(ws) {
         const room = getRoom(ws.data.ctx);
         if (room === null) return ws.terminate();
