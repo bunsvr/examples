@@ -44,10 +44,9 @@ export default new Group('/ws').ws<User>('/room', {
     },
 
     close(ws) {
-        // TODO: Send leave message
         console.log('User leaves:', ws.data.name);
 
         // Broadcast to the room
-        ws.data.server.publish(ws.data.room, 'leave:' + ws.data.name);
+        ws.data.meta.server.publish(ws.data.room, 'leave:' + ws.data.name);
     }
 });

@@ -9,7 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@stricjs/router": "^4.2.8",
+    "@stricjs/router": "beta",
     "@stricjs/utils": "^1.5.5"
   },
   "scripts": {
