@@ -8,7 +8,7 @@ export default template.create(`
     <head>
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <link rel='stylesheet' href='/public/styles/room.css' />
-        <title>$(id: str)</title>
+        <title>Room - $(id: str)</title>
     </head>
 
     <body>
