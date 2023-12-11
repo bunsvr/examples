@@ -1,0 +1,15 @@
+{
+  "name": "chat",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@stricjs/app": "^1.0.0-rc.2",
+    "@stricjs/utils": "^2.0.1"
+  }
+}
