@@ -1,5 +1,7 @@
 import { routes } from '@stricjs/app';
-import { file } from '@stricjs/utils';
+import { html } from '@stricjs/app/send';
+
+const page = await Bun.file(import.meta.dir + '/page.html').text();
 
 export default routes()
-    .get('/', file(import.meta.dir + '/page.html'));
+    .get('/', () => html(page));

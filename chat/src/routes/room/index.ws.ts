@@ -1,5 +1,4 @@
-import { Group } from '@stricjs/router';
-import { qs } from '@stricjs/utils';
+import { ws } from '@stricjs/app';
 
 interface User {
     /**
@@ -12,26 +11,17 @@ interface User {
     room: string;
 }
 
-const getRoom = qs.searchKey('q'),
-    roomLimit = 1000, messageLenLimit = 10000;
+const messageLenLimit = 10000;
 
-export default new Group().ws<User>('/room', {
+const route = ws.route<User>({
     open(ws) {
-        const room = getRoom(ws.data.ctx);
-        if (room === null) return ws.terminate();
-
-        const name = 'User' + (Date.now() % roomLimit) + 1;
-
-        ws.data.name = name;
-        ws.data.room = room;
-
         // Send the username back
-        ws.send('name:' + name);
-        console.log('New user joins:', name);
+        ws.send('name:' + ws.data.name);
+        console.log('New user joins:', ws.data.name);
 
         // Subscribe to the room and send first message
-        ws.subscribe(room);
-        ws.publish(room, 'join:' + name);
+        ws.subscribe(ws.data.room);
+        ws.publish(ws.data.room, 'join:' + ws.data.name);
     },
 
     message(ws, message) {
@@ -47,6 +37,8 @@ export default new Group().ws<User>('/room', {
         console.log('User leaves:', ws.data.name);
 
         // Broadcast to the room
-        ws.data.meta.server.publish(ws.data.room, 'leave:' + ws.data.name);
+        route.server.publish(ws.data.room, 'leave:' + ws.data.name);
     }
 });
+
+export default route;

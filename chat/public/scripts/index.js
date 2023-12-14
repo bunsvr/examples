@@ -2,7 +2,7 @@ document.getElementById('join').addEventListener('submit', e => {
     e.preventDefault();
 
     const roomID = document.getElementById('room')?.value;
-    if (!roomID) return alert('Invalid room name: ' + roomID);
+    if (!roomID) return alert('Invalid room ID: ' + roomID);
 
-    location.href = '/room?name=' + encodeURIComponent(roomID);
+    location.href = `/room?id=${encodeURIComponent(roomID)}`;
 });

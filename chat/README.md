@@ -11,3 +11,7 @@ To start the server:
 ```bash
 bun .
 ```
+
+## Directory structure
+- `src`: Containing all server-side code.
+- `public`: Stylesheets and scripts .
