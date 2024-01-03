@@ -8,14 +8,14 @@ import route from './index.ws';
 const getID = qs.searchKey('id'), userLimit = 1e6 + 7;
 
 export default routes('/room')
-    .state(getID)
+    .state({ id: getID })
 
     // Render room page
-    .get('/', c => html(render({ id: c.state })))
+    .get('/', c => html(render(c.state)))
 
     // Websocket endpoint
     .get('/ws', c => route.upgrade(c, {
-        data: { name: `User${Date.now() % userLimit}`, room: c.state }
+        data: { name: `User${Date.now() % userLimit}`, room: c.state.id }
     }))
 
     // Fallback
