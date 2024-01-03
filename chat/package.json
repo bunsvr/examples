@@ -9,7 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@stricjs/app": "^1.0.0-rc.5",
+    "@stricjs/app": "^1.0.0-rc.8",
     "@stricjs/utils": "^2.0.3"
   }
 }
