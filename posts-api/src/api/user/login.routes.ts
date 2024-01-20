@@ -8,13 +8,14 @@ import validator from './validator';
 import { password } from 'bun';
 
 export default routes()
+    // Parse credentials
     .state(validator)
 
     // Log in
     .post('/login', async ctx => {
         const info = credentials.get({ $username: ctx.state.username });
 
-        // API key check
+        // Check username and password
         if (info !== null && await password.verify(ctx.state.password, info.password)) {
             ctx.body = info.apiKey;
             return;
