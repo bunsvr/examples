@@ -1,23 +1,15 @@
-import { isUser } from '@schema/user';
-import { createUser, credentials, searchUser } from '@db/queries/user';
+import { createUser, searchUser } from '@db/queries/user';
 
 import { routes } from '@stricjs/app';
 import * as send from '@stricjs/app/send';
-import { jsonv } from '@stricjs/app/parser';
 
 import { password } from 'bun';
 
-export default routes('/user')
-    // Parse credentials
-    .state(
-        jsonv(isUser, ctx => {
-            // Handle error
-            ctx.body = 'Invalid username or password';
-            ctx.status = 400;
+import validator from './validator';
 
-            return null;
-        })
-    )
+export default routes()
+    // Parse credentials
+    .state(validator)
 
     // Sign up
     .post('/signup', async ctx => {
@@ -37,24 +29,6 @@ export default routes('/user')
         }
 
         ctx.body = 'Your username has already been taken';
-        ctx.status = 403;
-
-        // Call the fallback
-        return null;
-    })
-
-    // Log in
-    .post('/login', async ctx => {
-        const info = credentials.get({ $username: ctx.state.username });
-
-        // API key check
-        if (info !== null && await password.verify(ctx.state.password, info.password)) {
-            ctx.body = info.apiKey;
-            return;
-        }
-
-        // Send back the key
-        ctx.body = 'Invalid username or password';
         ctx.status = 403;
 
         // Call the fallback
