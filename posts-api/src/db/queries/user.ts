@@ -1,11 +1,39 @@
 import db from '@db';
 import {
-    apiKey as userAPIKey,
-    userTable, username, password
+    apiKey, userTable, username, password,
+    $username, $password, $apiKey
 } from '@db/user';
 
-export const userExists = db.query(`exists(select 1 from ${userTable} with (nolock) where ${userTable}.${username} = $${username})`);
-export const apiKey = db.query(`select (${userAPIKey}) from ${userTable} with (nolock) limit 1`);
+/**
+ * Search for user with matching username
+ */
+export const searchUser = db.query<1, {
+    [$username]: string
+}>(`select 1 from ${userTable} where ${userTable}.${username} = ${$username}`);
 
-export const createUser = db.query(`insert into ${userTable} (${username}, ${password}, ${apiKey}) values ($${username}, $${password}, $${apiKey})`);
+/**
+ * Get credentials
+ */
+export const credentials = db.query<{
+    [password]: string,
+    [apiKey]: string
+}, {
+    [$username]: string
+}>(`select ${apiKey}, ${password} from ${userTable} where ${userTable}.${username} = ${$username} limit 1`);
+
+/**
+ * Search for user with matching API keys
+ */
+export const searchAPIKey = db.query<1, {
+    [$apiKey]: string
+}>(`select 1 from ${userTable} where ${userTable}.${apiKey} = ${$apiKey}`);
+
+/**
+ * Create a new user
+ */
+export const createUser = db.query<null, {
+    [$username]: string,
+    [$password]: string,
+    [$apiKey]: string
+}>(`insert into ${userTable} (${username}, ${password}, ${apiKey}) values (${$username}, ${$password}, ${$apiKey})`);
 

@@ -1,32 +1,65 @@
-import { parseUser } from '@schema/user';
-import { createUser, userExists } from '@db/queries/user';
+import { isUser } from '@schema/user';
+import { createUser, credentials, searchUser } from '@db/queries/user';
 
 import { routes } from '@stricjs/app';
 import * as send from '@stricjs/app/send';
-import createAPIKey from './createAPIKey';
-import { apiKey } from '@db/user';
+import { jsonv } from '@stricjs/app/parser';
+
+import { password } from 'bun';
 
 export default routes('/user')
     // Parse credentials
-    .state(parseUser)
-    .reject(() => send.stat('Invalid credentials', 403))
+    .state(
+        jsonv(isUser, ctx => {
+            // Handle error
+            ctx.body = 'Invalid username or password';
+            ctx.status = 400;
 
-    // Cast password to the hash form
-    .layer(async ctx => ctx.state.password = await Bun.password.hash(ctx.state.password))
+            return null;
+        })
+    )
 
     // Sign up
     .post('/signup', async ctx => {
-        if (userExists.get(ctx.state)) {
-            ctx.body = 'Your username has already been taken';
-            ctx.status = 403;
+        const { username: $username } = ctx.state;
+
+        if (searchUser.get({ $username }) === null) {
+            const $password = await password.hash(ctx.state.password),
+                $apiKey = Bun.CryptoHasher.hash('sha256', $username, 'base64');
+
+            // Set the API key for insert
+            createUser.run({ $username, $password, $apiKey });
+
+            // Send back the API key
+            ctx.body = $apiKey;
 
             return;
         }
 
-        // Set the API key for insert
-        const key = ctx.state[apiKey] = createAPIKey();
-        createUser.run(ctx.state);
+        ctx.body = 'Your username has already been taken';
+        ctx.status = 403;
 
-        // Send back the API key
-        ctx.body = key;
-    }, send.ctx);
+        // Call the fallback
+        return null;
+    })
+
+    // Log in
+    .post('/login', async ctx => {
+        const info = credentials.get({ $username: ctx.state.username });
+
+        // API key check
+        if (info !== null && await password.verify(ctx.state.password, info.password)) {
+            ctx.body = info.apiKey;
+            return;
+        }
+
+        // Send back the key
+        ctx.body = 'Invalid username or password';
+        ctx.status = 403;
+
+        // Call the fallback
+        return null;
+    })
+
+    // Handle wrap and fallback
+    .use(send.plug);

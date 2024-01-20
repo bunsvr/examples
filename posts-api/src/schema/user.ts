@@ -1,5 +1,4 @@
 import { username, password } from '@db/user';
-import { jsonv } from '@stricjs/app/parser';
 import { t, vld, type Infer } from 'vld-ts';
 
 // The schema fields should be the same as database query fields
@@ -12,4 +11,4 @@ export const User = t.obj({
 type User = Infer<typeof User>;
 
 // Validator
-export const parseUser = jsonv(vld(User));
+export const isUser = vld(User);

@@ -27,6 +27,9 @@
       ],
       "@db/*": [
         "./src/db/*"
+      ],
+      "@client": [
+        "./tests/index.ts"
       ]
     }
   }
