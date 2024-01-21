@@ -7,7 +7,7 @@ import {
 /**
  * Search for user with matching username
  */
-export const searchUser = db.query<1, {
+export const userExists = db.query<1, {
     [$username]: string
 }>(`select 1 from ${userTable} where ${userTable}.${username} = ${$username}`);
 
@@ -24,9 +24,16 @@ export const credentials = db.query<{
 /**
  * Search for user with matching API keys
  */
-export const searchAPIKey = db.query<1, {
+export const usernameWithKey = db.query<{
+    [username]: string
+}, {
     [$apiKey]: string
-}>(`select 1 from ${userTable} where ${userTable}.${apiKey} = ${$apiKey}`);
+}>(`select ${username} from ${userTable} where ${userTable}.${apiKey} = ${$apiKey}`);
+
+export const updateAPIKey = db.query<void, {
+    [$username]: string,
+    [$apiKey]: string
+}>(`update ${userTable} set ${apiKey} = ${$apiKey} where ${username} = ${$username}`)
 
 /**
  * Create a new user
