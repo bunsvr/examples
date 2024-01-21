@@ -3,16 +3,16 @@ import body from './mockUser';
 import app from '@app';
 import { client } from '@stricjs/app';
 
-const tc = client(app);
+const tc = client(app, '/api/user');
 
 test('Sign up', async () => {
-    const res = await tc.post('/api/user/signup', { body });
+    const res = await tc.post('/signup', { body });
 
     expect(res.status).not.toBe(400);
 });
 
 test('Log in', async () => {
-    const res = await tc.post('/api/user/login', { body });
+    const res = await tc.post('/login', { body });
 
     expect(res.status).toBe(200);
 });
