@@ -30,6 +30,9 @@ export const usernameWithKey = db.query<{
     [$apiKey]: string
 }>(`select ${username} from ${userTable} where ${userTable}.${apiKey} = ${$apiKey}`);
 
+/**
+ * Update the API key of a specific user based on username
+ */
 export const updateAPIKey = db.query<void, {
     [$username]: string,
     [$apiKey]: string
