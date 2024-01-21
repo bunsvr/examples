@@ -13,10 +13,10 @@ export default routes()
 
     // Sign up
     .post('/signup', async ctx => {
-        const { username: $username } = ctx.state;
+        const { name: $username } = ctx.state;
 
         if (searchUser.get({ $username }) === null) {
-            const $password = await password.hash(ctx.state.password),
+            const $password = await password.hash(ctx.state.pass),
                 $apiKey = Bun.CryptoHasher.hash('sha256', $username, 'base64');
 
             // Set the API key for insert

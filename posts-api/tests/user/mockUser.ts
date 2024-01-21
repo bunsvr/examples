@@ -1,4 +1,6 @@
+import type { User } from '@schema/user';
+
 export default {
-    username: 'John',
-    password: '1234567890'
-} as any;
+    name: 'John',
+    pass: '1234567890'
+} satisfies User as any;

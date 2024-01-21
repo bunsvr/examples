@@ -13,10 +13,10 @@ export default routes()
 
     // Log in
     .post('/login', async ctx => {
-        const info = credentials.get({ $username: ctx.state.username });
+        const info = credentials.get({ $username: ctx.state.name });
 
         // Check username and password
-        if (info !== null && await password.verify(ctx.state.password, info.password)) {
+        if (info !== null && await password.verify(ctx.state.pass, info.password)) {
             ctx.body = info.apiKey;
             return;
         }
