@@ -9,7 +9,7 @@ import validator from './validator';
 
 export default routes()
     // Parse credentials
-    .state(validator)
+    .use(validator)
 
     // Sign up
     .post('/signup', async ctx => {

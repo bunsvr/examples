@@ -1,6 +1,9 @@
 import { test, expect } from 'bun:test';
-import tc from '@client';
 import body from './mockUser';
+import app from '@app';
+import { client } from '@stricjs/app';
+
+const tc = client(app);
 
 test('Sign up', async () => {
     const res = await tc.post('/api/user/signup', { body });

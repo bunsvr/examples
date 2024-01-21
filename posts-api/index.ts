@@ -3,18 +3,23 @@ import { status } from '@stricjs/app/send';
 
 // Build routes
 const app = await build({
-    routes: ['./src/api'],
+    // Auto prefix routes path by directory name
+    autoprefix: true,
+    // Load routes from specific directories
+    routes: ['./src/routes'],
+
+    // Serve options
     serve: {
         reusePort: true,
-        error: err => {
-            console.log(err);
-            return status(null, 500);
-        }
-    },
+        error: () => status(null, 500)
+    }
 });
 
+// Log routes only logs in dev
 app.logRoutes();
+
+// Launch the server
 app.boot();
 
-// Seve with Bun
+// Use for testing
 export default app;

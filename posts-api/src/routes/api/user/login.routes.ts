@@ -9,7 +9,7 @@ import { password } from 'bun';
 
 export default routes()
     // Parse credentials
-    .state(validator)
+    .use(validator)
 
     // Log in
     .post('/login', async ctx => {
