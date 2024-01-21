@@ -7,7 +7,9 @@ const db = new Database(
 );
 
 // Setup DB
-db.run("PRAGMA journal_mode = WAL;");
+db.run("PRAGMA journal_mode = WAL");
+db.run("PRAGMA synchronous = NORMAL");
+
 createUserTable(db);
 
 export default db;
