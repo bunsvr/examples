@@ -1,7 +1,7 @@
 import { plugin } from '@stricjs/app';
 
 import getAPIKey from './getAPIKey';
-import invalidAPIKey from './invalidAPIKey';
+import apiKeyReject from './apiKeyReject';
 
 import { apiKeyExists } from '@db/queries/user';
 
@@ -11,5 +11,5 @@ export default plugin(routes => routes
     .state({ $apiKey: getAPIKey })
     // Validate and reject
     .guard(ctx => apiKeyExists.get(ctx.state))
-    .reject(invalidAPIKey)
+    .reject(apiKeyReject)
 );
