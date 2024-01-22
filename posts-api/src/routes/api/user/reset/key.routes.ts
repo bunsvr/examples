@@ -1,17 +1,18 @@
 import { routes } from '@stricjs/app';
-import { text, status } from '@stricjs/app/send';
-import * as parser from '@stricjs/app/parser';
+import { text } from '@stricjs/app/send';
 
-import { updateAPIKey, usernameWithKey } from '@db/queries/user';
-import createAPIKey from '../createAPIKey';
+import { updateKeyByUsername, usernameWithKey } from '@db/queries/user';
+
+import createAPIKey from '@utils/user/createAPIKey';
+import getAPIKey from '@utils/user/getAPIKey';
+import apiKeyReject from '@utils/user/apiKeyReject';
 
 export default routes()
     // Parse API key as text and check in DB
-    .state(parser.text)
+    .state(getAPIKey)
+    // Check token and get username from state
     .state(ctx => usernameWithKey.get({ $apiKey: ctx.state }))
-
-    // Handle API key not found
-    .reject(() => status('Invalid API key', 403))
+    .reject(apiKeyReject)
 
     // Create new API key, update and send back the new key
     .put('/key', ctx => {
@@ -19,10 +20,8 @@ export default routes()
             $apiKey = createAPIKey($username);
 
         // Update the API key of the current user (search by username)
-        updateAPIKey.run({ $username, $apiKey });
+        updateKeyByUsername.run({ $username, $apiKey });
 
         // Return the key back
         return text($apiKey);
-    })
-
-
+    });

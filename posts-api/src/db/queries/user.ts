@@ -22,6 +22,13 @@ export const credentials = db.query<{
 }>(`select ${apiKey}, ${password} from ${userTable} where ${userTable}.${username} = ${$username} limit 1`);
 
 /**
+ * Check whether API key exists
+ */
+export const apiKeyExists = db.query<1, {
+    [$apiKey]: string
+}>(`select 1 from ${userTable} where ${userTable}.${apiKey} = ${$apiKey}`);
+
+/**
  * Search for user with matching API keys
  */
 export const usernameWithKey = db.query<{
@@ -33,10 +40,19 @@ export const usernameWithKey = db.query<{
 /**
  * Update the API key of a specific user based on username
  */
-export const updateAPIKey = db.query<void, {
+export const updateKeyByUsername = db.query<void, {
     [$username]: string,
     [$apiKey]: string
-}>(`update ${userTable} set ${apiKey} = ${$apiKey} where ${username} = ${$username}`)
+}>(`update ${userTable} set ${apiKey} = ${$apiKey} where ${username} = ${$username}`);
+
+
+/**
+ * Update the password of a specific user based on API key
+ */
+export const updatePassByKey = db.query<void, {
+    [$password]: string,
+    [$apiKey]: string
+}>(`update ${userTable} set ${password} = ${$password} where ${apiKey} = ${$apiKey}`);
 
 /**
  * Create a new user

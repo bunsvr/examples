@@ -1,13 +1,16 @@
 import { test, expect } from 'bun:test';
-import mockUser from './mockUser';
+import { newPass, oldPass, user } from './mockData';
 import app from '@app';
 import { client } from '@stricjs/app';
 
 const tc = client(app, '/api/user');
 
-test('User account', async () => {
+// Sign up and log in info
+const userInfo = { body: user };
+
+test('Sign up', async () => {
     // Sign up and log in
-    const userInfo = { body: mockUser };
+    console.time('Account creation');
 
     const resSignup = await tc.post('/signup', userInfo);
     expect(resSignup.status).not.toBe(400);
@@ -15,14 +18,33 @@ test('User account', async () => {
     const resLogin = await tc.post('/login', userInfo);
     expect(resLogin.status).toBe(200);
 
-    // API key reset
-    const oldKey = await resLogin.text();
-    console.log('Old API key:', oldKey);
+    console.timeEnd('Account creation');
 
-    const resResetKey = await tc.put('/reset/key', { body: oldKey });
+    // API key reset
+    console.time('Reset API key');
+
+    const oldKey = await resLogin.text();
+
+    const resResetKey = await tc.put('/reset/key', {
+        headers: { authorization: `Bearer ${oldKey}` }
+    });
     expect(resResetKey.status).toBe(200);
 
     const newKey = await resResetKey.text();
-    console.log('New API key:', newKey);
     expect(newKey).not.toBe(oldKey);
+
+    console.timeEnd('Reset API key');
+
+    // Reset password
+    console.time('Reset password');
+
+    const headers = { authorization: `Bearer ${newKey}` };
+
+    let resResetPass = await tc.put('/reset/pass', { body: newPass, headers });
+    expect(resResetPass.status).toBe(200);
+
+    resResetPass = await tc.put('/reset/pass', { body: oldPass, headers });
+    expect(resResetPass.status).toBe(200);
+
+    console.timeEnd('Reset password');
 });

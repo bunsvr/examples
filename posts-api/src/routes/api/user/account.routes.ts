@@ -1,23 +1,35 @@
 import { createUser, userExists, credentials } from '@db/queries/user';
 
+import createAPIKey from '@utils/user/createAPIKey';
+import passwordHash from '@utils/user/passwordHash';
+
+import { isUser } from '@schema/user';
+
 import { routes } from '@stricjs/app';
 import * as send from '@stricjs/app/send';
+import * as parser from '@stricjs/app/parser';
 
 import { password } from 'bun';
 
-import validator from './validator';
-import createAPIKey from './createAPIKey';
-
 export default routes()
     // Parse credentials
-    .use(validator)
+    .state(
+        parser.jsonv(isUser), ctx => {
+            // Handle error
+            ctx.body = 'Invalid username or password';
+            ctx.status = 400;
+
+            // Call the fallback
+            return null;
+        }
+    )
 
     // Sign up
     .post('/signup', async ctx => {
         const { name: $username } = ctx.state;
 
         if (userExists.get({ $username }) === null) {
-            const $password = await password.hash(ctx.state.pass),
+            const $password = await passwordHash(ctx.state.pass),
                 $apiKey = createAPIKey($username);
 
             // Set the API key for insert
