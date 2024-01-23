@@ -16,11 +16,11 @@ export default routes()
 
     // Create new API key, update and send back the new key
     .put('/key', ctx => {
-        const { username: $username } = ctx.state,
-            $apiKey = createAPIKey($username);
+        const { name: $name } = ctx.state,
+            $apiKey = createAPIKey($name);
 
         // Update the API key of the current user (search by username)
-        updateKeyByUsername.run({ $username, $apiKey });
+        updateKeyByUsername.run({ $name, $apiKey });
 
         // Return the key back
         return text($apiKey);

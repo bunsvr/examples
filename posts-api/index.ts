@@ -11,15 +11,16 @@ const app = await build({
     // Serve options
     serve: {
         reusePort: true,
-        error: () => status(null, 500)
+        error: (err) => {
+            // Log info to console then return 500
+            console.error(err);
+            return status(null, 500);
+        }
     }
 });
 
 // Log routes only logs in dev
 app.logRoutes();
 
-// Launch the server
-app.boot();
-
 // Use for testing
-export default app;
+export default app.boot();

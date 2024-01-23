@@ -26,14 +26,14 @@ export default routes()
 
     // Sign up
     .post('/signup', async ctx => {
-        const { name: $username } = ctx.state;
+        const { name: $name } = ctx.state;
 
-        if (userExists.get({ $username }) === null) {
+        if (userExists.get({ $name }) === null) {
             const $password = await passwordHash(ctx.state.pass),
-                $apiKey = createAPIKey($username);
+                $apiKey = createAPIKey($name);
 
             // Set the API key for insert
-            createUser.run({ $username, $password, $apiKey });
+            createUser.run({ $name, $password, $apiKey });
 
             // Send back the API key
             ctx.body = $apiKey;
@@ -50,7 +50,7 @@ export default routes()
 
     // Log in
     .post('/login', async ctx => {
-        const info = credentials.get({ $username: ctx.state.name });
+        const info = credentials.get({ $name: ctx.state.name });
 
         // Check username and password
         if (info !== null && await password.verify(ctx.state.pass, info.password)) {

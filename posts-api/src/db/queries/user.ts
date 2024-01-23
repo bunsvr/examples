@@ -1,65 +1,62 @@
 import db from '@db';
-import {
-    apiKey, userTable, username, password,
-    $username, $password, $apiKey
-} from '@db/user';
+import * as user from '@db/user';
 
 /**
  * Search for user with matching username
  */
 export const userExists = db.query<1, {
-    [$username]: string
-}>(`select 1 from ${userTable} where ${userTable}.${username} = ${$username}`);
+    [user.$name]: string
+}>(`select 1 from ${user.table} where ${user.table}.${user.name} = ${user.$name}`);
 
 /**
  * Get credentials
  */
 export const credentials = db.query<{
-    [password]: string,
-    [apiKey]: string
+    [user.password]: string,
+    [user.apiKey]: string
 }, {
-    [$username]: string
-}>(`select ${apiKey}, ${password} from ${userTable} where ${userTable}.${username} = ${$username} limit 1`);
+    [user.$name]: string
+}>(`select ${user.apiKey}, ${user.password} from ${user.table} where ${user.table}.${user.name} = ${user.name} limit 1`);
 
 /**
  * Check whether API key exists
  */
 export const apiKeyExists = db.query<1, {
-    [$apiKey]: string
-}>(`select 1 from ${userTable} where ${userTable}.${apiKey} = ${$apiKey}`);
+    [user.$apiKey]: string
+}>(`select 1 from ${user.table} where ${user.table}.${user.apiKey} = ${user.$apiKey}`);
 
 /**
  * Search for user with matching API keys
  */
 export const usernameWithKey = db.query<{
-    [username]: string
+    [user.name]: string
 }, {
-    [$apiKey]: string
-}>(`select ${username} from ${userTable} where ${userTable}.${apiKey} = ${$apiKey}`);
+    [user.$apiKey]: string
+}>(`select ${user.name} from ${user.table} where ${user.table}.${user.apiKey} = ${user.$apiKey}`);
 
 /**
  * Update the API key of a specific user based on username
  */
 export const updateKeyByUsername = db.query<void, {
-    [$username]: string,
-    [$apiKey]: string
-}>(`update ${userTable} set ${apiKey} = ${$apiKey} where ${username} = ${$username}`);
+    [user.$name]: string,
+    [user.$apiKey]: string
+}>(`update ${user.table} set ${user.apiKey} = ${user.$apiKey} where ${user.name} = ${user.$name}`);
 
 
 /**
  * Update the password of a specific user based on API key
  */
 export const updatePassByKey = db.query<void, {
-    [$password]: string,
-    [$apiKey]: string
-}>(`update ${userTable} set ${password} = ${$password} where ${apiKey} = ${$apiKey}`);
+    [user.$password]: string,
+    [user.$apiKey]: string
+}>(`update ${user.table} set ${user.password} = ${user.$password} where ${user.apiKey} = ${user.$apiKey}`);
 
 /**
  * Create a new user
  */
 export const createUser = db.query<null, {
-    [$username]: string,
-    [$password]: string,
-    [$apiKey]: string
-}>(`insert into ${userTable} (${username}, ${password}, ${apiKey}) values (${$username}, ${$password}, ${$apiKey})`);
+    [user.$name]: string,
+    [user.$password]: string,
+    [user.$apiKey]: string
+}>(`insert into ${user.table} (${user.name}, ${user.password}, ${user.apiKey}) values (${user.$name}, ${user.$password}, ${user.$apiKey})`);
 
