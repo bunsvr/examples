@@ -3,10 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+    "@types/bun": "latest",
+    "typescript": "latest"
   },
   "dependencies": {
     "@stricjs/app": "^1.0.0-rc.34",
