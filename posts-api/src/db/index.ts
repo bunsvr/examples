@@ -1,18 +1,16 @@
 import { Database } from 'bun:sqlite';
-import { createUserTable } from './user';
-import { createPostTable } from './post';
 
-const db = new Database(
-    import.meta.dir + (process.env.NODE_ENV !== 'production' ? '/dev.db' : '/prod.db'),
-    { create: true }
-);
+import * as user from '@db/table/user';
+import * as post from '@db/table/post';
 
 // Setup DB
+const db = new Database(`${import.meta.dir}/.db`, { create: true });
+
 db.run("PRAGMA journal_mode = WAL");
 db.run("PRAGMA synchronous = NORMAL");
 
 // Create necessary tables
-createUserTable(db);
-createPostTable(db);
+db.run(user.init);
+db.run(post.init);
 
 export default db;

@@ -1,5 +1,5 @@
 import db from '@db';
-import * as user from '@db/user';
+import * as user from '@db/table/user';
 
 /**
  * Search for user with matching username
