@@ -1,5 +1,6 @@
+# Dependencies
 /bun.lockb
 /node_modules
 
-/src/db/*.db
-/src/db/*.db-*
+# Database directory
+/src/db/local

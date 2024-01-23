@@ -4,7 +4,7 @@ import * as user from '@db/table/user';
 import * as post from '@db/table/post';
 
 // Setup DB
-const db = new Database(`${import.meta.dir}/.db`, { create: true });
+const db = new Database(`${import.meta.dir}/local/.db`, { create: true });
 
 db.run("PRAGMA journal_mode = WAL");
 db.run("PRAGMA synchronous = NORMAL");
