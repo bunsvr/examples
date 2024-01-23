@@ -1,22 +1,17 @@
-import createTable from '@db/utils/createTable';
+import createTable from '@db/utils/table/createTable';
+import t from '@db/utils/table/types';
 
-// Constants
-export const table = 'Posts';
+const posts = createTable({
+    name: 'Posts',
+    schema: {
+        id: t.int,
+        title: t.text,
+        categories: t.text,
+        content: t.text,
+        authors: t.text,
+        contributors: t.text
+    },
+    primaryKeys: ['id']
+});
 
-export const id = 'id';
-export const title = 'title';
-export const categories = 'categories';
-export const content = 'content';
-
-export const $id = `$${id}`;
-export const $title = `$${title}`;
-export const $categories = `$${categories}`;
-export const $content = `$${content}`;
-
-// Table init statement
-export const init = createTable(table, {
-    [id]: 'int not null',
-    [title]: 'text not null',
-    [categories]: 'text not null',
-    [content]: 'text not null'
-}, [id]);
+export default posts;

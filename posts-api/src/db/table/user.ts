@@ -1,19 +1,15 @@
-import createTable from '@db/utils/createTable';
+import createTable from '@db/utils/table/createTable';
+import t from '@db/utils/table/types';
 
-// Constants
-export const table = 'Users';
+const users = createTable({
+    name: 'Users',
+    schema: {
+        name: t.text,
+        password: t.text,
+        apiKey: t.text
+    },
+    primaryKeys: ['name', 'apiKey']
+});
 
-export const name = 'name';
-export const password = 'password';
-export const apiKey = 'apiKey';
+export default users;
 
-export const $name = `$${name}`;
-export const $password = `$${password}`;
-export const $apiKey = `$${apiKey}`;
-
-// Table init
-export const init = createTable(table, {
-    [name]: 'text not null',
-    [password]: 'text not null',
-    [apiKey]: 'text not null'
-}, [name, apiKey]);
