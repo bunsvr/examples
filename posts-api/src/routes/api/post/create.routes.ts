@@ -22,8 +22,17 @@ export default routes('/create')
     .reject(() => status('Title, description and categories are required!', 403))
 
     .post('/', ctx => {
-        const { post, name: $author } = ctx.state,
-            $id = Date.now().toString();
+        const { post, name: $author } = ctx.state, { categories } = post;
+
+        for (let i = 0, len = categories.length; i < len; ++i)
+            // Simplify this with the validator
+            if (
+                categories[i].length === 0
+                || categories.length > 32
+                || categories.includes(',')
+            ) return status('Invalid category name: ' + categories[i], 403);
+
+        const $id = Date.now().toString();
 
         // Create post
         createPost.run({
@@ -31,7 +40,7 @@ export default routes('/create')
             $contributors: '', $content: '',
 
             $title: post.title,
-            $categories: post.categories.join('|'),
+            $categories: categories.join(','),
         });
 
         return text($id);
