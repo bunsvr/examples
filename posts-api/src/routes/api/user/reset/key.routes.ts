@@ -1,21 +1,16 @@
 import { routes } from '@stricjs/app';
 import { text } from '@stricjs/app/send';
 
-import { updateKeyByUsername, usernameWithKey } from '@db/queries/user';
+import { updateKeyByUsername } from '@db/queries/user';
 
 import createAPIKey from '@utils/user/createAPIKey';
-import getAPIKey from '@utils/user/getAPIKey';
-import apiKeyReject from '@utils/user/apiKeyReject';
+import getUserFromKey from '@utils/user/getUserFromKey';
 
-export default routes()
-    // Parse API key as text and check in DB
-    .state(getAPIKey)
-    // Check token and get username from state
-    .state(ctx => usernameWithKey.get({ $apiKey: ctx.state }))
-    .reject(apiKeyReject)
+export default routes('/key')
+    .use(getUserFromKey)
 
     // Create new API key, update and send back the new key
-    .put('/key', ctx => {
+    .put('/', ctx => {
         const { name: $name } = ctx.state,
             $apiKey = createAPIKey($name);
 

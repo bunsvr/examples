@@ -2,7 +2,7 @@ import createTable from '@db/utils/table/createTable';
 import t from '@db/utils/table/types';
 
 const users = createTable({
-    name: 'Users',
+    name: 'users',
     schema: {
         name: t.text,
         password: t.text,

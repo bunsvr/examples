@@ -3,26 +3,30 @@ import { createUser, userExists, credentials } from '@db/queries/user';
 import createAPIKey from '@utils/user/createAPIKey';
 import passwordHash from '@utils/user/passwordHash';
 
-import { isUser } from '@schema/user';
-
 import { routes } from '@stricjs/app';
-import * as send from '@stricjs/app/send';
-import * as parser from '@stricjs/app/parser';
+import { plug } from '@stricjs/app/send';
+import { jsonv } from '@stricjs/app/parser';
 
 import { password } from 'bun';
 
+import { t, vld } from 'vld-ts';
+
+// Input user detail
+const User = t.obj({
+    name: t.str,
+    pass: t.str
+}), validator = jsonv(vld(User));
+
 export default routes()
     // Parse credentials
-    .state(
-        parser.jsonv(isUser), ctx => {
-            // Handle error
-            ctx.body = 'Invalid username or password';
-            ctx.status = 400;
+    .state(validator, ctx => {
+        // Handle error
+        ctx.body = 'Invalid username or password';
+        ctx.status = 400;
 
-            // Call the fallback
-            return null;
-        }
-    )
+        // Call the fallback
+        return null;
+    })
 
     // Sign up
     .post('/signup', async ctx => {
@@ -67,4 +71,4 @@ export default routes()
     })
 
     // Handle wrap and fallback
-    .use(send.plug);
+    .use(plug);

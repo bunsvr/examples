@@ -58,5 +58,5 @@ export const createUser = db.query<void, {
     [user.$.name]: string,
     [user.$.password]: string,
     [user.$.apiKey]: string
-}>(`insert into ${user.table} (${user.list('name', 'password', 'apiKey')}) values (${user.select('name', 'password', 'apiKey')})`);
+}>(`insert into ${user.table} (${user.keys}) values (${user.vars})`);
 
