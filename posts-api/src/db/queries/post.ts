@@ -1,14 +1,8 @@
-import db from '@db';
-import post from '@db/table/post';
+import query from '@db/utils/query';
+import posts from '@db/table/posts';
 
+const createPostQuery = `insert into ${posts} (${posts[':id']}, ${posts[':title']}, ${posts[':author']}) values ($id, $title, $author)` as const;
 /** 
  * Create a post
  */
-export const createPost = db.query<void, {
-    [post.$.id]: string,
-    [post.$.title]: string,
-    [post.$.content]: string,
-    [post.$.author]: string,
-    [post.$.categories]: string,
-    [post.$.contributors]: string
-}>(`insert into ${post.table} (${post.keys}) values (${post.vars})`);
+export const createPost = query<void, typeof createPostQuery>(createPostQuery);

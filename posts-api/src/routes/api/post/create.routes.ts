@@ -9,9 +9,11 @@ import { t, vld } from 'vld-ts';
 
 // Input post detail
 const Post = t.obj({
-    title: t.str,
+    title: t.str({ minLength: 1 }),
     description: t.str,
-    categories: t.arr(t.str)
+    categories: t.list(
+        t.str({ minLength: 1, maxLength: 16, exclude: ',' })
+    )
 });
 
 export default routes('/create')
@@ -19,28 +21,15 @@ export default routes('/create')
     .use(getUserFromKey)
 
     .state({ post: jsonv(vld(Post)) })
-    .reject(() => status('Title, description and categories are required!', 403))
+    .reject(() => status('Title, description or categories are missing or invalid!', 403))
 
     .post('/', ctx => {
-        const { post, name: $author } = ctx.state, { categories } = post;
-
-        for (let i = 0, len = categories.length; i < len; ++i)
-            // Simplify this with the validator
-            if (
-                categories[i].length === 0
-                || categories.length > 32
-                || categories.includes(',')
-            ) return status('Invalid category name: ' + categories[i], 403);
-
         const $id = Date.now().toString();
 
         // Create post
         createPost.run({
-            $id, $author,
-            $contributors: '', $content: '',
-
-            $title: post.title,
-            $categories: categories.join(','),
+            $id, $author: ctx.state.name,
+            $title: ctx.state.title,
         });
 
         return text($id);

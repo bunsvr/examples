@@ -1,7 +1,7 @@
-import createTable from '@db/utils/table/createTable';
-import t from '@db/utils/table/types';
+import t from '@db/utils/types';
+import sql from 'sql-light';
 
-const users = createTable({
+const users = sql.table({
     name: 'users',
     schema: {
         name: t.text,
