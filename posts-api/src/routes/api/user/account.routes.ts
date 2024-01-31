@@ -14,7 +14,7 @@ import { t, vld } from 'vld-ts';
 // Input user detail
 const User = t.obj({
     name: t.str,
-    pass: t.str
+    pass: t.str({ minLength: 8 })
 }), validator = jsonv(vld(User));
 
 export default routes()
